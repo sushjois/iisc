@@ -7,7 +7,7 @@ import subprocess
 paraview.simple._DisableFirstRenderCameraReset()
 
 
-file_path = '/home/sushmitha/Desktop/blobdata/Data/tv_108.vtk'
+file_path = '/home/sushmitha/Desktop/blobdata/Data/tv_104.vtk'
 parent_path = '/home/sushmitha/Desktop/blobdata/' 
 file_name = os.path.splitext(os.path.basename(file_path))[0]
 
@@ -158,7 +158,7 @@ with open(parent_path+'/trees/'+file_name +'.csv', 'w') as csvfile:
 	for index in range(0,len(nodes),2):
 		writer.writerow([nodes[index], nodes[index+1], scalars[nodes[index]], scalars[nodes[index+1]]])
 
-contour_path = parent_path +'/trees/'+ 'tree-'+ file_name + '.dot'
+contour_path = parent_path +'/trees/'+ 'tree-'+ file_name + '.txt'
 contour_file = open(contour_path, 'w')
 contour_file.write('graph {\n')
 for index in range(0,len(nodes),2):

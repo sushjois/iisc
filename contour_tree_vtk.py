@@ -125,6 +125,8 @@ renderView1.CameraParallelScale = 86.60254037844386
 
 scalars = {}
 nodes = []
+nodeType = {}
+nodeIdentifier = {}
 
 bounds = vtkFile.GetDataInformation().GetBounds()
 [x_min,x_max,y_min,y_max,z_min,z_max]=bounds
@@ -139,6 +141,8 @@ with open(nodes_file, 'rb') as csvfile:
 	for r in spamreader:
 		row = r[0].split(',')
 		scalars[int(row[2])] = float(row[0])
+		nodeType[int(row[2])] = int(row[3])
+		nodeIdentifier[int(row[2])] = int(row[1])
 
 with open(arcs_file, 'rb') as csvfile:
 	csvfile.readline()
@@ -152,11 +156,11 @@ with open(arcs_file, 'rb') as csvfile:
 		nodes.append(index)
 
 with open(parent_path+'/trees/'+file_name +'.csv', 'w') as csvfile:
-	fieldnames = ['Node:0', 'Node:1', 'Scalar:0', 'Scalar:1']
+	fieldnames = ['Node:0', 'Node:1', 'Scalar:0', 'Scalar:1', 'Type:0' , 'Type:1' , 'Identifier:0' , 'Identifier:1']
 	writer = csv.writer(csvfile, delimiter=',')
 	writer.writerow(fieldnames)	
 	for index in range(0,len(nodes),2):
-		writer.writerow([nodes[index], nodes[index+1], scalars[nodes[index]], scalars[nodes[index+1]]])
+		writer.writerow([nodes[index], nodes[index+1], scalars[nodes[index]], scalars[nodes[index+1]], nodeType[nodes[index]] , nodeType[nodes[index + 1]] , nodeIdentifier[nodes[index]] , nodeIdentifier[nodes[index + 1]]])
 
 contour_path = parent_path +'/trees/'+ 'tree-'+ file_name + '.dot'
 contour_file = open(contour_path, 'w')

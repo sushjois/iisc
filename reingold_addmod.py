@@ -3,24 +3,56 @@ from demo_trees import trees
 from operator import lt, gt
 from sys import stdout, maxint
 from demo_trees import trees
+from writeNodesEdges import writeObjects
+
 minint = -maxint - 1
-nodes = []
+nodes = [0,1,2,3,4,5,6]
 positions = []
+edges = [(0,1),(0,4),(1,2),(1,3),(4,5),(4,6)]
 
 class DrawTree:
     def __init__(self, tree, depth=-1):
         self.x = -1
-        self.y = depth
+        self.y = 2-depth
         self.tree = tree
         self.children = []
         self.thread = None
         self.mod = 0
 
     def left(self): 
-        return self.thread or len(self.children) and self.children[0]
+        try:
+            p = self.thread
+        except:
+            pass
+        try:
+            q = len(self.children)
+        except:
+            pass
+        try:
+            r = self.children[0]
+        except:
+            pass
+        s = q and r
+        t = p or s
+        return t
 
     def right(self):
-        return self.thread or len(self.children) and self.children[-1]
+        try:
+            p = self.thread
+        except:
+            pass
+        try:
+            q = len(self.children)
+        except:
+            pass
+        try:
+            r = self.children[-1]
+        except:
+            pass
+        s = q and r
+        t = p or s
+        return t
+        #return self.thread or len(self.children) and self.children[-1]
 
 #traverse to the bottom of the tree, and place the leaves at an arbitrary
 #   x coordinate
@@ -98,7 +130,7 @@ def contour(left,
             roffset=0,
             left_outer=None, 
             right_outer=None):
-    if not max_offset or left.x + loffset - (right.x + roffset) > max_offset:
+    if not max_offset or (left.x + loffset) - (right.x + roffset) > max_offset:
         max_offset = left.x + loffset - (right.x + roffset)
 
     if not left_outer:
@@ -111,6 +143,7 @@ def contour(left,
     ri = right.left()
     ro = right_outer.right()
 
+    #if children exist
     if li and ri:
         loffset += left.mod
         roffset += right.mod
@@ -119,9 +152,11 @@ def contour(left,
     return li, ri, max_offset, loffset, roffset, left_outer, right_outer
 
 def print_tree(tree_root):
-    nodes.append(tree_root.tree)
+
     positions.append([tree_root.x, tree_root.y, 0])
-    #print tree_root.tree, tree_root.x, tree_root.y #, len(tree_root.children)
+    
+    
+    # print tree_root.tree, tree_root.x, tree_root.y #, len(tree_root.children)
     try:
         print_tree(tree_root.children[0])
     except:
@@ -134,4 +169,6 @@ def print_tree(tree_root):
 if __name__ == "__main__":
     tree_root = layout(trees[6])
     print_tree(tree_root)
-    print positions
+    #print positions
+    print type(nodes[0])
+    writeObjects(positions, edges, scalar=nodes, name='nodes', fileout='sushmitha_visual')

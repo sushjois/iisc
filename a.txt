@@ -1,0 +1,19 @@
+[Common]  _____ _____ _  __                       __  __    ____   ___  _ _____ 
+[Common] |_   _|_   _| |/ /                      / /__\ \  |___ \ / _ \/ |___  |
+[Common]   | |   | | | ' /                      | |/ __| |   __) | | | | |  / /
+[Common]   | |   | | | . \                      | | (__| |  / __/| |_| | | / /
+[Common]   |_|   |_| |_|\_\                     | |\___| | |_____|\___/|_|/_/
+[Common]                                         \_\  /_/
+[Common] Welcome!
+[vtkContourForests] Launching computation for field 'scalars'...
+threads :1
+partitions : 1
+[ContourForests] Initialization                    : 5.19753e-05
+[ContourForests] Sort scalars (+mirror)            : 0.152419
+[ContourForests] Interface and overlap init.       : 0.251154
+[ContourForests] Parallel allocations              : 0.00808907
+[ContourForests] ParallelBuild                     : 0.794887
+[ContourForests] Stitch                            : 1.19209e-06
+[ContourForests] Create Contour tree               : 0.0023849
+[ContourForests] TOTAL                             : 1.20904
+Tree computed ...

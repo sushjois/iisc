@@ -6,9 +6,10 @@ import subprocess
 #### disable automatic camera reset on 'Show'
 paraview.simple._DisableFirstRenderCameraReset()
 
+file_name = 'adhitya.vtk'
 
-file_path = '/home/sushmitha/Desktop/blobdata/Data/tv_108.vtk'
-parent_path = '/home/sushmitha/Desktop/blobdata/' 
+file_path = '/home/sushmitha/Desktop/' + file_name
+parent_path = '/home/sushmitha/Desktop/' 
 file_name = os.path.splitext(os.path.basename(file_path))[0]
 
 # create a new 'Legacy VTK Reader'
@@ -126,7 +127,7 @@ renderView1.CameraParallelScale = 86.60254037844386
 scalars = {}
 nodes = []
 nodeType = {}
-nodeIdentifier = {}
+
 
 bounds = vtkFile.GetDataInformation().GetBounds()
 [x_min,x_max,y_min,y_max,z_min,z_max]=bounds
@@ -140,10 +141,18 @@ with open(nodes_file, 'rb') as csvfile:
 	spamreader = csv.reader(csvfile, delimiter=' ')
 	for r in spamreader:
 		row = r[0].split(',')
-		scalars[int(row[2])] = float(row[0])
-		nodeType[int(row[2])] = int(row[3])
-		nodeIdentifier[int(row[2])] = int(row[1])
-
+		nodePosition = int(row[2])
+		scalars[nodePosition] = float(row[0])
+		ttkNodeType = int(row[3])
+		if ttkNodeType == 0:
+			nodeType[nodePosition] = 'MINIMA'
+		elif ttkNodeType == 1 or ttkNodeType == 2 or ttkNodeType == 5:
+			nodeType[nodePosition] = 'SADDLE'
+		elif ttkNodeType == 3:
+			nodeType[nodePosition] = 'MAXIMA'
+		else:
+			nodeType[nodePosition] = 'REGULAR' 
+			
 with open(arcs_file, 'rb') as csvfile:
 	csvfile.readline()
 	spamreader = csv.reader(csvfile, delimiter=' ')
@@ -155,6 +164,17 @@ with open(arcs_file, 'rb') as csvfile:
 		index = z * x_dim * y_dim + y * x_dim + x
 		nodes.append(index)
 
+rgfile = open(parent_path + os.sep + file_name +'.rg', 'w')
+rgfile.write(str(len(scalars)) + " " + str((len(nodes)/2)) + "\n")
+
+for i in scalars:
+	rgfile.write(str(i) + " " + str(scalars[i]) + " " + nodeType[i] + "\n")
+
+for index in range(0,len(nodes),2):
+	rgfile.write(str(nodes[index]) + " " + str(nodes[index+1]) + "\n")
+
+rgfile.close()
+"""
 with open(parent_path+'/trees/'+file_name +'.csv', 'w') as csvfile:
 	fieldnames = ['Node:0', 'Node:1', 'Scalar:0', 'Scalar:1', 'Type:0' , 'Type:1' , 'Identifier:0' , 'Identifier:1']
 	writer = csv.writer(csvfile, delimiter=',')
@@ -172,9 +192,9 @@ for index in range(0,len(nodes),2):
 
 contour_file.write('}')
 contour_file.close()
-
-os.remove(nodes_file)
-os.remove(arcs_file)
+"""
+#os.remove(nodes_file)
+#os.remove(arcs_file)
 
 print 'Done! :)'
 os._exit(0)
